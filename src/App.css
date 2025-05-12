@@ -1,0 +1,9 @@
+html,
+body,
+#root {
+  height: 100vh; /* Ensure the root takes up full height */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
