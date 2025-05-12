@@ -67,7 +67,9 @@ function Game() {
         }
       );
 
+      localStorage.removeItem("token");
       setUser(null);
+
       navigate("/login");
     } catch (err) {
       console.error("Logout failed:", err);
