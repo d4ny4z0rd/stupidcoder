@@ -288,7 +288,7 @@ function Arena() {
             </p>
           )}
 
-          <div className="text-center mt-24 hover:cursor-pointer">
+          <div className="text-center mt-36 hover:cursor-pointer">
             <Button
               variant={"link"}
               className="hover:cursor-pointer text-lg text-gray-300 font-semibold"
