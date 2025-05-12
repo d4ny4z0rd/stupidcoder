@@ -292,7 +292,7 @@ function Arena() {
             <Button
               variant={"link"}
               className="hover:cursor-pointer text-xl text-gray-300 font-semibold"
-              onClick={() => navigate("/howtoplay")}
+              onClick={() => navigate("/game")}
             >
               👈🏼 Dashboard
             </Button>
