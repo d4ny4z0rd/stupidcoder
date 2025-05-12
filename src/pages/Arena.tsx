@@ -100,16 +100,15 @@ function Arena() {
   }, [question]);
 
   const startChallenge = () => {
-    // console.log("Clicked on Find");
+    console.log("Clicked on Find");
 
-    // const token = getCookie("jwt");
-    // if (!token) {
-    //   console.log("No token found");
-    //   return;
-    // }
+    const token = localStorage.getItem("ws_token");
+    if (!token) {
+      console.log("No token found");
+      return;
+    }
 
-    if (socket) {
-      console.log("Closing existing WebSocket");
+    if (socket && socket.readyState === WebSocket.OPEN) {
       socket.close();
     }
 
@@ -119,7 +118,7 @@ function Arena() {
     wasMatchedRef.current = false;
 
     const newSocket = new WebSocket(
-      `wss://ws-be-111659801199.asia-south2.run.app/api/v1/ws`
+      `wss://ws-be-111659801199.asia-south2.run.app/api/v1/ws?token=${token}`
     );
 
     let timeoutId: NodeJS.Timeout;
@@ -370,14 +369,5 @@ function Arena() {
     </div>
   );
 }
-
-// const getCookie = (name: string): string | null => {
-//   const value = `; ${document.cookie}`;
-//   const parts = value.split(`; ${name}=`);
-//   if (parts.length === 2) {
-//     return parts.pop()?.split(";").shift() ?? null;
-//   }
-//   return null;
-// };
 
 export default Arena;

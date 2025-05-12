@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
-import { useForm } from "react-hook-form";
+import { useForm } from "react-hook-form"; // Removed `set`
 import { z } from "zod";
 import CardWrapper from "./CardWrapper";
 import {
@@ -54,31 +54,16 @@ const LoginForm = () => {
 
       if (!response.ok) throw new Error("Authentication failed");
 
-      // Add this right after a successful login response
-      console.log("Response status:", response.status);
-      console.log("Response headers:", Array.from(response.headers.entries()));
-      // This won't show HTTP-only cookies, but will show any non-HttpOnly ones
-      console.log("Current cookies:", document.cookie);
+      const data = await response.json();
 
-      // Add a verification step to check if the auth worked
-      try {
-        const verifyResponse = await fetch(
-          "https://ws-be-111659801199.asia-south2.run.app/api/v1/authentication/verify",
-          {
-            method: "GET",
-            credentials: "include",
-          }
-        );
+      console.log("Login response:", data);
 
-        if (verifyResponse.ok) {
-          navigate("/game");
-        } else {
-          setError("Session verification failed");
-        }
-      } catch (verifyErr) {
-        console.error("Verification failed:", verifyErr);
-        setError("Unable to verify session");
+      // ✅ Store only for WebSocket use
+      if (data.data.token) {
+        localStorage.setItem("ws_token", data.data.token);
       }
+
+      navigate("/game");
     } catch (err) {
       console.error(err);
       setError("Authentication failed");
