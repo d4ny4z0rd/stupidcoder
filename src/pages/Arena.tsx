@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import CodeEditor from "../components/CodeEditor";
-import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
 
 function Arena() {
   const [socket, setSocket] = useState<WebSocket | null>(null);
@@ -30,7 +28,6 @@ function Arena() {
 
   const questionRef = useRef(question);
   const wasMatchedRef = useRef(false); // Track if a match was found
-  const navigate = useNavigate();
 
   // Set the full page background
   useEffect(() => {
@@ -103,13 +100,13 @@ function Arena() {
   }, [question]);
 
   const startChallenge = () => {
-    console.log("Clicked on Find");
+    // console.log("Clicked on Find");
 
-    const token = getCookie("jwt");
-    if (!token) {
-      console.log("No token found");
-      return;
-    }
+    // const token = getCookie("jwt");
+    // if (!token) {
+    //   console.log("No token found");
+    //   return;
+    // }
 
     if (socket) {
       console.log("Closing existing WebSocket");
@@ -122,7 +119,7 @@ function Arena() {
     wasMatchedRef.current = false;
 
     const newSocket = new WebSocket(
-      `ws://ws-be-111659801199.asia-south2.run.app/api/v1/ws?token=${token}`
+      `wss://ws-be-111659801199.asia-south2.run.app/api/v1/ws`
     );
 
     let timeoutId: NodeJS.Timeout;
@@ -304,16 +301,6 @@ function Arena() {
               </p>
             </div>
           )}
-
-          <div className="text-center mt-24 hover:cursor-pointer">
-            <Button
-              variant={"link"}
-              className="hover:cursor-pointer text-lg text-white font-semibold"
-              onClick={() => navigate("/game")}
-            >
-              👈🏼 Dashboard
-            </Button>
-          </div>
         </div>
       ) : (
         // Game view - utilizing screen space efficiently
@@ -384,13 +371,13 @@ function Arena() {
   );
 }
 
-const getCookie = (name: string): string | null => {
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) {
-    return parts.pop()?.split(";").shift() ?? null;
-  }
-  return null;
-};
+// const getCookie = (name: string): string | null => {
+//   const value = `; ${document.cookie}`;
+//   const parts = value.split(`; ${name}=`);
+//   if (parts.length === 2) {
+//     return parts.pop()?.split(";").shift() ?? null;
+//   }
+//   return null;
+// };
 
 export default Arena;
