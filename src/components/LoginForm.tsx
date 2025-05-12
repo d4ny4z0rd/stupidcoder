@@ -54,11 +54,13 @@ const LoginForm = () => {
 
       if (!response.ok) throw new Error("Authentication failed");
 
-      // Debug code: Check if Set-Cookie header is present
-      console.log("Response headers:", response.headers);
-      console.log("All cookies:", document.cookie);
+      // Add this right after a successful login response
+      console.log("Response status:", response.status);
+      console.log("Response headers:", Array.from(response.headers.entries()));
+      // This won't show HTTP-only cookies, but will show any non-HttpOnly ones
+      console.log("Current cookies:", document.cookie);
 
-      // Check if we're authenticated after login
+      // Add a verification step to check if the auth worked
       try {
         const verifyResponse = await fetch(
           "https://ws-be-111659801199.asia-south2.run.app/api/v1/authentication/verify",
@@ -69,15 +71,13 @@ const LoginForm = () => {
         );
 
         if (verifyResponse.ok) {
-          console.log("Authentication verified successfully");
           navigate("/game");
         } else {
-          console.error("Authentication verification failed");
-          setError("Authentication verification failed");
+          setError("Session verification failed");
         }
       } catch (verifyErr) {
-        console.error("Verification request failed:", verifyErr);
-        setError("Authentication verification failed");
+        console.error("Verification failed:", verifyErr);
+        setError("Unable to verify session");
       }
     } catch (err) {
       console.error(err);
