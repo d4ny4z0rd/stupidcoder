@@ -288,10 +288,10 @@ function Arena() {
             </p>
           )}
 
-          <div className="text-center mt-36 hover:cursor-pointer">
+          <div className="text-center mt-56 hover:cursor-pointer">
             <Button
               variant={"link"}
-              className="hover:cursor-pointer text-lg text-gray-300 font-semibold"
+              className="hover:cursor-pointer text-xl text-gray-300 font-semibold"
               onClick={() => navigate("/howtoplay")}
             >
               👈🏼 Dashboard
@@ -299,7 +299,7 @@ function Arena() {
           </div>
 
           {totalMatchesPlayed !== null && (
-            <div className="text-center mt-64">
+            <div className="text-center mt-24">
               <p className="text-md">
                 <strong className="font-semibold">{totalMatchesPlayed}</strong>{" "}
                 <span className="text-gray-300 font-semibold">
