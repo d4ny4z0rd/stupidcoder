@@ -1,6 +1,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
-import { useForm } from "react-hook-form"; // Removed `set`
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import CardWrapper from "./CardWrapper";
 import {
@@ -54,7 +54,31 @@ const LoginForm = () => {
 
       if (!response.ok) throw new Error("Authentication failed");
 
-      navigate("/game");
+      // Debug code: Check if Set-Cookie header is present
+      console.log("Response headers:", response.headers);
+      console.log("All cookies:", document.cookie);
+
+      // Check if we're authenticated after login
+      try {
+        const verifyResponse = await fetch(
+          "https://ws-be-111659801199.asia-south2.run.app/api/v1/authentication/verify",
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
+
+        if (verifyResponse.ok) {
+          console.log("Authentication verified successfully");
+          navigate("/game");
+        } else {
+          console.error("Authentication verification failed");
+          setError("Authentication verification failed");
+        }
+      } catch (verifyErr) {
+        console.error("Verification request failed:", verifyErr);
+        setError("Authentication verification failed");
+      }
     } catch (err) {
       console.error(err);
       setError("Authentication failed");
