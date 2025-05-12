@@ -26,10 +26,9 @@ const LoginSchema = z.object({
 });
 
 const LoginForm = () => {
-  const [showTwoFactor, setShowTwoFactor] = useState(false);
+  const showTwoFactor = false;
   const [error, setError] = useState<string | undefined>("");
-  const [success, setSuccess] = useState<string | undefined>("");
-  const [isPending, startTransition] = useTransition();
+  const [isPending] = useTransition();
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -59,7 +58,6 @@ const LoginForm = () => {
     } catch (err) {
       console.error(err);
       setError("Authentication failed");
-      setSuccess(undefined);
     }
   };
 

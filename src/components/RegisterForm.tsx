@@ -1,6 +1,4 @@
-"use client";
-
-import { Suspense, useState, useTransition } from "react";
+import { Suspense, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import CardWrapper from "./CardWrapper";
 import {
@@ -25,7 +23,7 @@ const RegisterSchema = z.object({
 
 const RegisterForm = () => {
   const navigate = useNavigate();
-  const [isPending, startTransition] = useTransition();
+  const [isPending] = useTransition();
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
