@@ -67,7 +67,7 @@ function Game() {
         }
       );
 
-      localStorage.removeItem("token");
+      localStorage.removeItem("ws_token");
       setUser(null);
 
       navigate("/login");
