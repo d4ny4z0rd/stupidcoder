@@ -58,7 +58,6 @@ const LoginForm = () => {
 
       console.log("Login response:", data);
 
-      // ✅ Store only for WebSocket use
       if (data.data.token) {
         localStorage.setItem("ws_token", data.data.token);
       }

@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import CodeEditor from "../components/CodeEditor";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 function Arena() {
   const [socket, setSocket] = useState<WebSocket | null>(null);
@@ -27,9 +29,9 @@ function Arena() {
   );
 
   const questionRef = useRef(question);
-  const wasMatchedRef = useRef(false); // Track if a match was found
+  const wasMatchedRef = useRef(false);
+  const navigate = useNavigate();
 
-  // Set the full page background
   useEffect(() => {
     document.documentElement.classList.add("h-full");
     document.body.classList.add("h-full", "m-0", "overflow-hidden");
@@ -84,7 +86,7 @@ function Arena() {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (question.title && question.description) {
         e.preventDefault();
-        e.returnValue = ""; // Required for Chrome
+        e.returnValue = "";
       }
     };
 
@@ -136,7 +138,7 @@ function Arena() {
         switch (data.type) {
           case "question":
             wasMatchedRef.current = true;
-            clearTimeout(timeoutId); // Clear the timeout when an opponent is found
+            clearTimeout(timeoutId);
             setQuestion({
               title: data.message.title,
               description: data.message.description,
@@ -177,7 +179,7 @@ function Arena() {
 
     newSocket.onclose = () => {
       console.log("Disconnected from websocket");
-      clearTimeout(timeoutId); // Clear the timeout when the WebSocket is closed
+      clearTimeout(timeoutId);
       if (
         !questionRef.current.title &&
         !questionRef.current.description &&
@@ -192,7 +194,6 @@ function Arena() {
 
     setSocket(newSocket);
 
-    // Set a timeout to stop looking for opponents after 10 seconds
     timeoutId = setTimeout(() => {
       if (
         !questionRef.current.title &&
@@ -233,26 +234,23 @@ function Arena() {
   const stripFirstLineIndent = (str: string = "") => {
     if (!str) return "";
 
-    // Split into lines
     const lines = str.split("\n");
     if (lines.length === 0) return "";
 
-    // Find the minimum indentation across all non-empty lines
     const minIndent =
       lines
-        .filter((line) => line.trim() !== "") // Consider only non-empty lines
+        .filter((line) => line.trim() !== "")
         .reduce((min, line) => {
           const indent = line.match(/^\s*/)?.[0].length || 0;
           return indent < min ? indent : min;
         }, Infinity) || 0;
 
-    // Remove the common indentation from all lines
     const deindentedLines = lines.map((line) => {
-      if (line.trim() === "") return ""; // Preserve empty lines
+      if (line.trim() === "") return "";
       return line.substring(minIndent);
     });
 
-    return deindentedLines.join("\n").trimEnd(); // Join with newlines and remove trailing whitespace
+    return deindentedLines.join("\n").trimEnd();
   };
 
   return (
@@ -290,6 +288,16 @@ function Arena() {
             </p>
           )}
 
+          <div className="text-center mt-24 hover:cursor-pointer">
+            <Button
+              variant={"link"}
+              className="hover:cursor-pointer text-lg text-gray-300 font-semibold"
+              onClick={() => navigate("/howtoplay")}
+            >
+              👈🏼 Dashboard
+            </Button>
+          </div>
+
           {totalMatchesPlayed !== null && (
             <div className="text-center mt-64">
               <p className="text-md">
@@ -302,9 +310,7 @@ function Arena() {
           )}
         </div>
       ) : (
-        // Game view - utilizing screen space efficiently
         <div className="flex flex-col h-full">
-          {/* Header with player stats */}
           {opponent && (
             <div className="text-lg font-medium flex justify-between bg-white/10 p-2 rounded-lg mb-2">
               <div>
@@ -317,7 +323,6 @@ function Arena() {
             </div>
           )}
 
-          {/* Question details */}
           <div className="bg-white/10 p-3 rounded-lg mb-2 text-left overflow-auto max-h-[30vh]">
             <h2 className="text-xl font-bold text-center mb-2">
               {question.title}
